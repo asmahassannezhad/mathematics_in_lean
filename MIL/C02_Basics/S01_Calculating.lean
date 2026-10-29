@@ -1,18 +1,19 @@
 module
 public import MIL.Common
 public import Mathlib.Basic.Real.Basic
+-- continuous functions, limits, derivatives, integrals, etc.
+def myCont (x: ℝ)
 -- An example.
 example (a b c : ℝ) : a * b * c = b * (a * c) := by
   rw [mul_comm a b]
   rw [mul_assoc b a c]
 
+
 -- Try these.
 example (a b c : ℝ) : c * b * a = b * (a * c) := by
-  sorry
-
+  ring
 example (a b c : ℝ) : a * (b * c) = b * (a * c) := by
-  sorry
-
+  ring
 -- An example.
 example (a b c : ℝ) : a * b * c = b * c * a := by
   rw [mul_assoc]
