@@ -27,8 +27,13 @@ variable (ha : |a| < δ) (hb : |b| < δ)
 
 end
 
-theorem my_lemma2 : ∀ {x y ε : ℝ}, 0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε :=
-  sorry
+theorem my_lemma2 : ∀ {x y ε : ℝ}, 0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε :=by
+ intro x y ep epos eone xe ye
+ calc
+   |x * y| = |x| * |y| := abs_mul x y
+   _ ≤ |x| * ep := by nlinarith [abs_nonneg x]
+   _ < 1 * ep := by nlinarith
+   _ = ep := by ring
 
 section
 variable (a b δ : ℝ)
@@ -42,16 +47,20 @@ end
 theorem my_lemma3 :
     ∀ {x y ε : ℝ}, 0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε := by
   intro x y ε epos ele1 xlt ylt
-  sorry
+  calc
+   |x * y| = |x| * |y| := abs_mul x y
+   _ ≤  ε * |y| := by nlinarith [abs_nonneg y]
+   _ < ε * 1 := by nlinarith
+   _ = ε := by ring
 
 theorem my_lemma4 :
     ∀ {x y ε : ℝ}, 0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε := by
   intro x y ε epos ele1 xlt ylt
   calc
-    |x * y| = |x| * |y| := sorry
-    _ ≤ |x| * ε := sorry
-    _ < 1 * ε := sorry
-    _ = ε := sorry
+    |x * y| = |x| * |y| := abs_mul x y
+    _ ≤ |x| * ε := mul_le_mul le_rfl ylt.le (abs_nonneg y) (abs_nonneg x)
+    _ < 1 * ε := mul_lt_mul_of_pos_right (lt_of_lt_of_le xlt ele1) epos
+    _ = ε := one_mul ε
 
 def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop :=
   ∀ x, f x ≤ a
