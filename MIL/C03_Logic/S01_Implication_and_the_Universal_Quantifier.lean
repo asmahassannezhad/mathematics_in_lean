@@ -8,8 +8,13 @@ namespace C03S01
 
 #check ∀ x y ε : ℝ, 0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε
 
-theorem my_lemma : ∀ x y ε : ℝ, 0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε :=
-  sorry
+theorem my_lemma : ∀ x y ε : ℝ, 0 < ε → ε ≤ 1 → |x| < ε → |y| < ε → |x * y| < ε := by
+ intro x y ep epos eone xe ye
+ calc
+    |x * y| = |x| * |y| := abs_mul x y
+    _ ≤ |x| * ep := by nlinarith [abs_nonneg x]
+    _ < 1 * ep := by nlinarith
+    _ = ep := by ring
 
 section
 variable (a b δ : ℝ)

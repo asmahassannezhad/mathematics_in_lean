@@ -2,7 +2,7 @@ module
 public import MIL.Common
 public import Mathlib.Basic.Real.Basic
 -- continuous functions, limits, derivatives, integrals, etc.
-def myCont (x: ℝ)
+
 -- An example.
 example (a b c : ℝ) : a * b * c = b * (a * c) := by
   rw [mul_comm a b]

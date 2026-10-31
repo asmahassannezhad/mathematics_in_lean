@@ -13,23 +13,30 @@ example (h : y > x ^ 2) : y > 0 ∨ y < -1 := by
   linarith [pow_two_nonneg x]
 
 example (h : -y > x ^ 2 + 1) : y > 0 ∨ y < -1 := by
-  right
-  linarith [pow_two_nonneg x]
+ right
+ linarith [pow_two_nonneg x]
 
 example (h : y > 0) : y > 0 ∨ y < -1 :=
-  Or.inl h
+ Or.inl h
 
 example (h : y < -1) : y > 0 ∨ y < -1 :=
   Or.inr h
 
-example : x < |y| → x < y ∨ x < -y := by
+example (ha: x < |y|) : x < y ∨ x < -y := by
   rcases le_or_gt 0 y with h | h
-  · rw [abs_of_nonneg h]
-    intro h; left; exact h
-  · rw [abs_of_neg h]
-    intro h; right; exact h
+  · rw [abs_of_nonneg h] at ha
+    left; exact ha
+  · rw [abs_of_neg h] at ha
+    right; exact ha
 
 example : x < |y| → x < y ∨ x < -y := by
+ cases le_or_gt 0 y
+ case  inl h =>
+  rw [abs_of_nonneg h]
+  intro h; left; exact h
+ case inr h =>
+ sorry
+/-
   cases le_or_gt 0 y
   case inl h =>
     rw [abs_of_nonneg h]
@@ -37,6 +44,7 @@ example : x < |y| → x < y ∨ x < -y := by
   case inr h =>
     rw [abs_of_neg h]
     intro h; right; exact h
+  -/
 
 example : x < |y| → x < y ∨ x < -y := by
   cases le_or_gt 0 y
