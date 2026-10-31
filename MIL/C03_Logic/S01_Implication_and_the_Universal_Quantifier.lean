@@ -61,10 +61,10 @@ theorem my_lemma4 :
     _ ≤ |x| * ε := mul_le_mul le_rfl ylt.le (abs_nonneg y) (abs_nonneg x)
     _ < 1 * ε := mul_lt_mul_of_pos_right (lt_of_lt_of_le xlt ele1) epos
     _ = ε := one_mul ε
-
+-- function bounded from above
 def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop :=
   ∀ x, f x ≤ a
-
+-- Function bounded from below
 def FnLb (f : ℝ → ℝ) (a : ℝ) : Prop :=
   ∀ x, a ≤ f x
 
@@ -78,15 +78,23 @@ example (hfa : FnUb f a) (hgb : FnUb g b) : FnUb (fun x ↦ f x + g x) (a + b) :
   apply hfa
   apply hgb
 
-example (hfa : FnLb f a) (hgb : FnLb g b) : FnLb (fun x ↦ f x + g x) (a + b) :=
-  sorry
+example (hfa : FnLb f a) (hgb : FnLb g b) : FnLb (fun x ↦ f x + g x) (a + b) := by
+  intro x
+  dsimp
+  apply add_le_add
+  apply hfa
+  apply hgb
 
-example (nnf : FnLb f 0) (nng : FnLb g 0) : FnLb (fun x ↦ f x * g x) 0 :=
-  sorry
+example (nnf : FnLb f 0) (nng : FnLb g 0) : FnLb (fun x ↦ f x * g x) 0 := by
+  intro x
+  dsimp
+  exact mul_nonneg (nnf x) (nng x)
 
 example (hfa : FnUb f a) (hgb : FnUb g b) (nng : FnLb g 0) (nna : 0 ≤ a) :
-    FnUb (fun x ↦ f x * g x) (a * b) :=
-  sorry
+    FnUb (fun x ↦ f x * g x) (a * b) := by
+    intro x
+    dsimp
+    exact mul_le_mul (hfa x) (hgb x) (nng x) nna
 
 end
 
@@ -119,10 +127,11 @@ example (mf : Monotone f) (mg : Monotone g) : Monotone fun x ↦ f x + g x :=
   fun _a _b aleb ↦ add_le_add (mf aleb) (mg aleb)
 
 example {c : ℝ} (mf : Monotone f) (nnc : 0 ≤ c) : Monotone fun x ↦ c * f x :=
-  sorry
+ fun _a _b aleb ↦ mul_le_mul_of_nonneg_left (mf aleb) nnc
+
 
 example (mf : Monotone f) (mg : Monotone g) : Monotone fun x ↦ f (g x) :=
-  sorry
+ fun _a _b aleb ↦ mf (mg aleb)
 
 def FnEven (f : ℝ → ℝ) : Prop :=
   ∀ x, f x = f (-x)
