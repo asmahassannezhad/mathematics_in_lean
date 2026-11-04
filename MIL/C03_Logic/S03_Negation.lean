@@ -32,12 +32,28 @@ example (h : ∀ a, ∃ x, f x > a) : ¬FnHasUb f := by
   rcases h a with ⟨x, hx⟩
   have : f x ≤ a := fnuba x
   linarith
+--- a second solution using rintro, obtain
+example (h : ∀ a, ∃ x, f x > a) : ¬FnHasUb f := by
+ rintro ⟨a, ha⟩
+ obtain ⟨x, hx⟩ := h a
+ have : f x ≤ a := ha x
+ linarith
 
-example (h : ∀ a, ∃ x, f x < a) : ¬FnHasLb f :=
-  sorry
+ --- solved
+example (h : ∀ a, ∃ x, f x < a) : ¬FnHasLb f := by
+  intro fnlb
+  rcases fnlb with ⟨a, fnlba⟩
+  rcases h a with ⟨x, hx⟩
+  have : f x ≥ a := fnlba x
+  linarith
 
-example : ¬FnHasUb fun x ↦ x :=
-  sorry
+-- solved
+
+example : ¬FnHasUb fun x ↦ x := by
+ rintro ⟨c, ch⟩
+ have : c+1 ≤ c :=  ch (c + 1)
+ linarith
+
 
 #check (not_le_of_gt : a > b → ¬a ≤ b)
 #check (not_lt_of_ge : a ≥ b → ¬a < b)
@@ -45,6 +61,7 @@ example : ¬FnHasUb fun x ↦ x :=
 #check (le_of_not_gt : ¬a > b → a ≤ b)
 
 example (h : Monotone f) (h' : f a < f b) : a < b := by
+
   sorry
 
 example (h : a ≤ b) (h' : f b < f a) : ¬Monotone f := by
@@ -137,4 +154,3 @@ example (h : 0 < 0) : a > 37 := by
   contradiction
 
 end
-
