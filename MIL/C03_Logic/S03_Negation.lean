@@ -60,9 +60,12 @@ example : ¬FnHasUb fun x ↦ x := by
 #check (lt_of_not_ge : ¬a ≥ b → a < b)
 #check (le_of_not_gt : ¬a > b → a ≤ b)
 
+-- solved
 example (h : Monotone f) (h' : f a < f b) : a < b := by
-
-  sorry
+  apply lt_of_not_ge
+  intro hba
+  have : f b ≤ f a := h hba
+  linarith
 
 example (h : a ≤ b) (h' : f b < f a) : ¬Monotone f := by
   sorry
